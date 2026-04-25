@@ -7,6 +7,7 @@ export async function GET(): Promise<Response> {
         artist: "The Groove Band",
         duration: 240,
         url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        thumbnail: "https://loremflickr.com/200/200/summer",
       },
       {
         id: "2",
@@ -14,6 +15,7 @@ export async function GET(): Promise<Response> {
         artist: "Luna Echo",
         duration: 198,
         url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        thumbnail: "https://loremflickr.com/200/200/midnight",
       },
       {
         id: "3",
@@ -21,6 +23,7 @@ export async function GET(): Promise<Response> {
         artist: "Synth Wave",
         duration: 210,
         url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+        thumbnail: "https://loremflickr.com/200/200/electric",
       },
       {
         id: "4",
@@ -28,6 +31,7 @@ export async function GET(): Promise<Response> {
         artist: "Coastal Sounds",
         duration: 225,
         url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+        thumbnail: "https://loremflickr.com/200/200/ocean",
       },
       {
         id: "5",
@@ -35,6 +39,7 @@ export async function GET(): Promise<Response> {
         artist: "City Beats",
         duration: 195,
         url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+        thumbnail: "https://loremflickr.com/200/200/urban",
       },
       {
         id: "6",
@@ -42,6 +47,7 @@ export async function GET(): Promise<Response> {
         artist: "Cosmic Jazz",
         duration: 260,
         url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
+        thumbnail: "https://loremflickr.com/200/200/starlight",
       },
     ];
 
