@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Navigation from "@/components/Navigation";
+import Thumbnail from "@/components/Thumbnail";
 import Player from "@/components/Player";
 import TrackInfo from "@/components/TrackInfo";
 import ProgressBar from "@/components/ProgressBar";
@@ -16,6 +18,7 @@ interface Track {
   artist: string;
   duration: number;
   url: string;
+  thumbnail?: string | null;
 }
 
 interface ApiResponse {
@@ -220,79 +223,90 @@ export default function Home(): React.ReactElement {
   }, [isPlaying, currentTrack, volume]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 sm:p-8">
-      <div className="mx-auto max-w-2xl">
-        <h1 className="mb-8 text-center text-4xl font-bold text-white">
-          Music Player
-        </h1>
+    <>
+      <Navigation />
+      <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 pt-20 sm:p-8">
+        <div className="mx-auto max-w-2xl">
+          <h1 className="mb-8 text-center text-4xl font-bold text-white">
+            Music Player
+          </h1>
 
-        <div className="space-y-8">
-          {/* Player Section */}
-          <div className="rounded-lg bg-slate-800 p-6 shadow-xl">
-            {isLoading ? (
-              <LoadingState />
-            ) : error ? (
-              <ErrorState error={error} />
-            ) : currentTrack ? (
-              <>
-                <TrackInfo
-                  track={currentTrack}
-                  currentTime={currentTime}
-                  duration={duration}
-                />
-                <div className="my-6">
-                  <ProgressBar
+          <div className="space-y-8">
+            {/* Player Section */}
+            <div
+              id="player"
+              className="rounded-lg bg-slate-800 p-6 shadow-xl"
+            >
+              {isLoading ? (
+                <LoadingState />
+              ) : error ? (
+                <ErrorState error={error} />
+              ) : currentTrack ? (
+                <>
+                  <Thumbnail
+                    src={currentTrack.thumbnail ?? null}
+                    alt={`Album art for ${currentTrack.name}`}
+                    title={currentTrack.name}
+                  />
+                  <TrackInfo
+                    track={currentTrack}
                     currentTime={currentTime}
                     duration={duration}
-                    onSeek={handleSeek}
                   />
-                </div>
-                <Player
-                  currentTrack={currentTrack}
-                  isPlaying={isPlaying}
-                  onPlay={handlePlay}
-                  onPause={handlePause}
-                  onNext={handleNext}
-                  onPrevious={handlePrevious}
+                  <div className="my-6">
+                    <ProgressBar
+                      currentTime={currentTime}
+                      duration={duration}
+                      onSeek={handleSeek}
+                    />
+                  </div>
+                  <Player
+                    currentTrack={currentTrack}
+                    isPlaying={isPlaying}
+                    onPlay={handlePlay}
+                    onPause={handlePause}
+                    onNext={handleNext}
+                    onPrevious={handlePrevious}
+                  />
+                  <div className="mt-6">
+                    <VolumeControl
+                      volume={volume}
+                      onVolumeChange={handleVolumeChange}
+                    />
+                  </div>
+                </>
+              ) : (
+                <EmptyState />
+              )}
+            </div>
+
+            {/* Track List */}
+            {!isLoading && !error && (
+              <div id="tracks" className="rounded-lg bg-slate-800 p-6 shadow-xl">
+                <h2 className="mb-4 text-xl font-semibold text-white">
+                  Available Tracks
+                </h2>
+                <TrackList
+                  tracks={tracks}
+                  onSelectTrack={handleSelectTrack}
+                  currentTrackId={currentTrack?.id ?? null}
+                  isLoading={isLoading}
+                  error={error}
                 />
-                <div className="mt-6">
-                  <VolumeControl
-                    volume={volume}
-                    onVolumeChange={handleVolumeChange}
-                  />
-                </div>
-              </>
-            ) : (
-              <EmptyState />
+              </div>
             )}
           </div>
-
-          {/* Track List */}
-          {!isLoading && !error && (
-            <div className="rounded-lg bg-slate-800 p-6 shadow-xl">
-              <h2 className="mb-4 text-xl font-semibold text-white">
-                Available Tracks
-              </h2>
-              <TrackList
-                tracks={tracks}
-                onSelectTrack={handleSelectTrack}
-                currentTrackId={currentTrack?.id ?? null}
-                isLoading={isLoading}
-                error={error}
-              />
-            </div>
-          )}
         </div>
-      </div>
 
-      {/* Hidden audio element */}
-      <audio
-        ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
-        onEnded={handleTrackEnd}
-        crossOrigin="anonymous"
-      />
-    </main>
+        {/* Hidden audio element */}
+        <audio
+          ref={audioRef}
+          onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={handleLoadedMetadata}
+          onEnded={handleTrackEnd}
+          crossOrigin="anonymous"
+        />
+      </main>
+    </>
   );
 }
